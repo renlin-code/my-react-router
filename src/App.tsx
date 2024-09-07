@@ -1,33 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { NAVIGATION_EVENTS } from "./consts";
+import Home from "./pages/Home.tsx";
+import About from "./pages/About.tsx";
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currPathName, setCurrPathName] = useState(window.location.pathname)
+
+  useEffect(() => {
+    const onLocationChange = (): void => {
+      setCurrPathName(window.location.pathname)
+    }
+
+    window.addEventListener(NAVIGATION_EVENTS.PUSHSTATE, onLocationChange)
+    window.addEventListener(NAVIGATION_EVENTS.POPSTATE, onLocationChange)
+
+    return () => {
+      window.removeEventListener(NAVIGATION_EVENTS.PUSHSTATE, onLocationChange)
+      window.removeEventListener(NAVIGATION_EVENTS.POPSTATE, onLocationChange)
+    }
+  }, [])
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      { currPathName === "/" && <Home /> }
+      { currPathName === "/about" && <About /> }
     </>
   )
 }
