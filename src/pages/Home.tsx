@@ -1,4 +1,4 @@
-import { Link } from "../Link.tsx"
+import { Link } from "../components/Link.tsx"
 
 export default function Home() {
     return (

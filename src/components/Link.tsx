@@ -1,7 +1,7 @@
-import { BUTTONS, NAVIGATION_EVENTS } from "./consts";
+import { BUTTONS, NAVIGATION_EVENTS } from "../consts";
 import { ReactNode } from "react";
 
-export function navigate(path: string) {
+function navigate(path: string) {
     window.history.pushState({}, "", path)
     const navEvent = new Event(NAVIGATION_EVENTS.PUSHSTATE)
     window.dispatchEvent(navEvent)
