@@ -1,21 +1,24 @@
-import Home from "./pages/Home.tsx";
-import About from "./pages/About.tsx";
+import { lazy, Suspense } from "react";
 import { Router } from "./components/Router.tsx";
 import { IRouteComponentProps } from "./types/index";
 import { Route } from "./components/Route.tsx";
 
+const Home = lazy(() => import("./pages/Home.tsx"));
+const About = lazy(() => import("./pages/About.tsx"));
+
+
 const routes = [
-  { 
-    path: "/", 
+  {
+    path: "/",
     Component: Home,
   },
-  { 
-    path: "/about", 
+  {
+    path: "/about",
     Component: About
   },
   {
     path: "/about/:id",
-    Component: ({routeParams}: IRouteComponentProps) => <h1>{routeParams?.id}</h1>
+    Component: ({ routeParams }: IRouteComponentProps) => <h1>{routeParams?.id}</h1>
   }
 ]
 
@@ -24,10 +27,12 @@ const routes = [
 function App() {
   return (
     <>
-      <Router routes={routes}>
-        <Route path="/" Component={Home} />
-        <Route path="/about" Component={About} />
-      </Router>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Router routes={routes}>
+          <Route path="/" Component={Home} />
+          <Route path="/about" Component={About} />
+        </Router>
+      </Suspense>
     </>
   )
 }
