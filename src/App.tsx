@@ -8,14 +8,14 @@ const About = lazy(() => import("./pages/About.tsx"));
 
 
 const routes = [
-  {
-    path: "/",
-    Component: Home,
-  },
-  {
-    path: "/about",
-    Component: About
-  },
+  // {
+  //   path: "/",
+  //   Component: Home,
+  // },
+  // {
+  //   path: "/about",
+  //   Component: About
+  // },
   {
     path: "/about/:id",
     Component: ({ routeParams }: IRouteComponentProps) => <h1>{routeParams?.id}</h1>

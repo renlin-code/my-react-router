@@ -1,12 +1,13 @@
 import React, { Children, useEffect, useState } from "react";
+import { getCurrPath } from "../utils";
 import { NAVIGATION_EVENTS } from "../consts";
 import { IRoute } from "../types";
 import { match } from "path-to-regexp";
 import { IRouteComponentProps } from "../types";
 
 interface RouterProps {
-    children: React.ReactNode,
-    routes: IRoute[],
+    children?: React.ReactNode,
+    routes?: IRoute[],
     DefaultComponent?: React.FC<IRouteComponentProps>
 }
 
@@ -15,11 +16,11 @@ function Default() {
 }
 
 export function Router({ children, routes = [], DefaultComponent = Default }: RouterProps) {
-    const [currPathName, setCurrPathName] = useState(window.location.pathname);
+    const [currPathName, setCurrPathName] = useState(getCurrPath());
 
     useEffect(() => {
         const onLocationChange = (): void => {
-            setCurrPathName(window.location.pathname);
+            setCurrPathName(getCurrPath());
         };
 
         window.addEventListener(NAVIGATION_EVENTS.PUSHSTATE, onLocationChange);
