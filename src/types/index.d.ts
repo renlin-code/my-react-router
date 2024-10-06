@@ -1,8 +1,8 @@
-export interface Route {
+export interface IRoute {
     path: string
     Component: React.FC<RouteComponentProps>
 }
 
-export interface RouteComponentProps {
+export interface IRouteComponentProps {
     routeParams?: Record<string, string>
 }

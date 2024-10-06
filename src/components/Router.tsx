@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import { NAVIGATION_EVENTS } from "../consts";
-import { Route } from "../types";
+import { IRoute } from "../types";
 import { match } from "path-to-regexp";
-import { RouteComponentProps } from "../types";
+import { IRouteComponentProps } from "../types";
 
 interface RouterProps {
-    routes: Route[],
-    DefaultComponent?: React.FC<RouteComponentProps>
+    children: React.ReactNode,
+    routes: IRoute[],
+    DefaultComponent?: React.FC<IRouteComponentProps>
 }
 
 function Default() {
     return <h1>404</h1>
 }
 
-export function Router({ routes, DefaultComponent = Default }: RouterProps) {
+export function Router({ children, routes = [], DefaultComponent = Default }: RouterProps) {
     const [currPathName, setCurrPathName] = useState(window.location.pathname);
 
     useEffect(() => {
@@ -32,7 +33,20 @@ export function Router({ routes, DefaultComponent = Default }: RouterProps) {
 
     let routeParams = {}
 
-    const CurrComponent: React.FC<RouteComponentProps> | undefined = routes.find(({ path }) => {
+    const routesFromChildren = Children.map(children, (child) => {
+        if (!React.isValidElement(child)) {
+            return null;
+        }
+        const { type, props } = child;
+        const { name } = type as { name: string };
+        const isRoute = name === "Route";
+
+        return isRoute ? props : null;
+    })
+
+    const allRoutes = routesFromChildren ? [...routesFromChildren, ...routes] : routes;
+
+    const CurrComponent: React.FC<IRouteComponentProps> | undefined = allRoutes.find(({ path }) => {
         if (path === currPathName) return true
         
         const matcherURL = match(path, { decode: decodeURIComponent })

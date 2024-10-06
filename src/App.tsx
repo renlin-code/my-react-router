@@ -1,7 +1,8 @@
 import Home from "./pages/Home.tsx";
 import About from "./pages/About.tsx";
 import { Router } from "./components/Router.tsx";
-import { RouteComponentProps } from "./types/index";
+import { IRouteComponentProps } from "./types/index";
+import { Route } from "./components/Route.tsx";
 
 const routes = [
   { 
@@ -14,7 +15,7 @@ const routes = [
   },
   {
     path: "/about/:id",
-    Component: ({routeParams}: RouteComponentProps) => <h1>{routeParams?.id}</h1>
+    Component: ({routeParams}: IRouteComponentProps) => <h1>{routeParams?.id}</h1>
   }
 ]
 
@@ -23,7 +24,10 @@ const routes = [
 function App() {
   return (
     <>
-      <Router routes={routes} />
+      <Router routes={routes}>
+        <Route path="/" Component={Home} />
+        <Route path="/about" Component={About} />
+      </Router>
     </>
   )
 }
